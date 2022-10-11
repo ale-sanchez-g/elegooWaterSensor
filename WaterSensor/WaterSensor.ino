@@ -1,11 +1,10 @@
 int red = 2;
-int green = 3;
-int blue = 4;
+int waterPump = 9;
 
 void setup() {
   pinMode(red, OUTPUT);
-  pinMode(green, OUTPUT);
-  pinMode(blue, OUTPUT);
+  pinMode(waterPump, OUTPUT);
+  
   Serial.begin(9600);
   while (! Serial); 
   Serial.println("Wait untilSerial is ready");
@@ -20,28 +19,18 @@ void loop() {
   // read the input on analog pin 0:
   int value = analogRead(A0);
 
-  if (value > 300) {
-    Serial.println("Very heavy Rain Value of: " + String(value));
-    digitalWrite (red,LOW);
-    digitalWrite(green,HIGH);
-    digitalWrite(blue,HIGH);
-    }
-  else if ((value >200) && (value <= 300)) {
-    Serial.println("AVERAGE Rain Value of: " + String(value));
-    digitalWrite (green,LOW);
+  if (value < 150) {
+    Serial.println("Low water : " + String(value));
     digitalWrite (red,HIGH);
-    digitalWrite(blue,HIGH);
+    digitalWrite (waterPump,HIGH);
+    // pump water for 10 seconds
+    delay(10000);
     }
-  else{
-    Serial.println("Dry Weather Value of: " + String(value));
-    digitalWrite (blue,LOW);
-    digitalWrite (red,HIGH);
-    digitalWrite (green,HIGH);
-  }
-  delay(1000);
-  digitalWrite (blue,HIGH);
-  digitalWrite (red,HIGH);
-  digitalWrite (green,HIGH);
+
+  Serial.println("Read of: " + String(value));
+
+  digitalWrite (red,LOW);
+  digitalWrite (waterPump,LOW);
   Serial.println("waiting 3 sec for next reading");
   delay(3000);
 }
